@@ -6,19 +6,21 @@ include:
   - "**/*.py"
 rules:
   - id: hardcoded-credential
+    severity: high
+    match: "**/*.ts"
     type: regex
-    description: Flags obvious hardcoded credentials in source.
     pattern: '(?i)(api_key|password|secret|token)\s*=\s*"[^"]{6,}"'
     message: Hardcoded credential — use environment variables or a secret manager
 
   - id: presentation-imports-data
-    type: regex
-    description: Presentation layer must not depend on internal/data (clean architecture).
-    pattern: '(?i)(from\s+[''"].*internal/data|import\s+.*internal/data|\.\./data/)'
+    severity: medium
+    from: "**/presentation/**"
+    to: "**/data/**"
     message: Layer violation — presentation must not import the data layer directly
 
   - id: hygiene-todo
+    severity: low
+    match: "**/*"
     type: regex
-    description: Unresolved work markers before merge.
     pattern: '(?i)\b(TODO|FIXME)\b'
     message: Resolve TODO/FIXME before merging
